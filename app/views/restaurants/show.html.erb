@@ -1,16 +1,33 @@
 <h1><%= @restaurant.name %></h1>
 
-
-
 <p>Here are all the reviews:</p>
-
-<h3>Reviews</h3>
-<% @reviews.each do |review| %>
-  <div>
-    <strong><%= review.name %></strong>
-    <br />
-    <p><%= review.body %></p>
-    <p><%= link_to 'Delete', review_path(review), method: :delete, data: { confirm: 'Are you sure?' } %></p>
-  </div>
+<% @restaurant.reviews.each do |review| %>
+  <p>Rating: <%= review.rating %></p>
+  <p>Comment: <%= review.comment %></p>
+  <p>Posted by: <%= review.user.name %> at <%= time_ago_in_words review.created_at %> ago</p>
 <% end %>
-<%= render 'reviews/form' %>
+
+<h2>Add a review</h2>
+<%= form_for [ @restaurant, @review ] do |f| %>
+  <%= f.label :user_id, "User name" %>
+  
+  <%=f.select :user_id, @users.collect{|user| [ user.name, user.id ]} %>
+
+  <%= f.label :comment %>
+  <%= f.text_area :comment, rows: 10, cols: 35 %>
+
+  <%= f.label :rating %>
+  <%= f.select :rating, [
+  	["1 (lowest)", 1],
+  	["2 (ok)", 2],
+  	["3 (better)", 3],
+  	["4 (yum)", 4],
+  	["5 (awesome)", 5],
+  ] %>     
+
+  <!--or this inplace after :rating, inoptions_for_select([1,2,3,4,5]) %> -->
+
+  <%= f.submit %>
+  <% end %>
+
+  <%=link_to 'Back', restaurants_path%>
