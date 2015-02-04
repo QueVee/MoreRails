@@ -1,0 +1,16 @@
+<h1><%= @restaurant.name %></h1>
+
+
+
+<p>Here are all the reviews:</p>
+
+<h3>Reviews</h3>
+<% @reviews.each do |review| %>
+  <div>
+    <strong><%= review.name %></strong>
+    <br />
+    <p><%= review.body %></p>
+    <p><%= link_to 'Delete', review_path(review), method: :delete, data: { confirm: 'Are you sure?' } %></p>
+  </div>
+<% end %>
+<%= render 'reviews/form' %>
